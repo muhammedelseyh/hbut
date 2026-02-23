@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أُوركيد | الفخامة الاستثنائية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root { --bg: #050505; --panel: #0a0a0a; --gold: #D4AF37; --txt: #fff; --gray: #a0a0a0; --f-head: 'Amiri', serif; --f-body: 'Tajawal', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--txt); font-family: var(--f-body); overflow-x: hidden; line-height: 1.7; scroll-behavior: smooth; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        img { width: 100%; height: auto; display: block; object-fit: cover; }
+        
+        /* Navbar */
+        .nav { position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(5,5,5,0.85); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(212,175,55,0.1); z-index: 1000; }
+        .logo { font-family: var(--f-head); font-size: 2rem; color: var(--gold); font-weight: 700; }
+        .links { display: flex; gap: 30px; list-style: none; }
+        .links a { position: relative; font-size: 1.1rem; }
+        .links a::after { content: ''; position: absolute; bottom: -5px; right: 0; width: 0; height: 1px; background: var(--gold); transition: 0.4s; }
+        .links a:hover { color: var(--gold); }
+        .links a:hover::after { width: 100%; }
+        .btn-res { border: 1px solid var(--gold); padding: 8px 25px; border-radius: 50px; color: var(--gold); transition: 0.3s; }
+        .btn-res:hover { background: var(--gold); color: #000; }
+        
+        /* Mobile Menu */
+        .menu-btn { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1001; }
+        .menu-btn span { width: 30px; height: 2px; background: var(--gold); }
+        .mob-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 40px; transform: translateY(-100%); transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mob-menu.active { transform: translateY(0); }
+        .mob-menu a { font-family: var(--f-head); font-size: 2.5rem; color: #fff; }
+
+        /* Hero */
+        .hero { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; background: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1920&auto=format&fit=crop') center/cover; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.6), #050505); }
+        .h-content { position: relative; z-index: 2; padding: 0 20px; }
+        .h-sub { color: var(--gold); font-size: 1.2rem; letter-spacing: 4px; display: block; margin-bottom: 20px; }
+        .h-title { font-family: var(--f-head); font-size: clamp(3rem, 6vw, 5.5rem); line-height: 1.2; margin-bottom: 30px; }
+        .h-btn { display: inline-block; padding: 15px 40px; border: 1px solid var(--gold); color: var(--gold); font-weight: 700; transition: 0.4s; letter-spacing: 1px; }
+        .h-btn:hover { background: var(--gold); color: #000; transform: translateY(-3px); }
+
+        /* Marquee */
+        .marquee-sec { background: var(--bg); border-top: 1px solid rgba(212,175,55,0.15); border-bottom: 1px solid rgba(212,175,55,0.15); padding: 25px 0; position: relative; z-index: 5; }
+        .marquee-mask { max-width: 100%; overflow: hidden; -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent); mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent); }
+        .m-track { display: flex; width: max-content; animation: scroll 25s linear infinite; }
+        .m-track span { color: var(--gold); font-family: var(--f-head); font-size: 1.5rem; margin: 0 40px; letter-spacing: 2px;}
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+
+        /* Sections */
+        section { padding: 120px 5%; position: relative; }
+        .sec-head { text-align: center; margin-bottom: 60px; }
+        .s-title { font-family: var(--f-head); font-size: 3.5rem; }
+        .s-sub { color: var(--gold); letter-spacing: 2px; font-size: 1.1rem; display: block; margin-bottom: 10px; }
+
+        /* About & Luxury Seal */
+        .about { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .a-img-box { position: relative; z-index: 1; border-radius: 4px;}
+        .a-img { filter: brightness(0.85); transition: 0.5s; border: 1px solid rgba(212,175,55,0.2); border-radius: 4px;}
+        .a-img:hover { filter: brightness(1); }
+        .seal { position: absolute; bottom: -40px; right: -30px; width: 150px; height: 150px; background: rgba(10,10,10,0.8); backdrop-filter: blur(10px); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(212,175,55,0.4); box-shadow: 0 15px 30px rgba(0,0,0,0.6); z-index: 10; animation: float 4s ease-in-out infinite; }
+        .seal::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 1px dashed var(--gold); opacity: 0.6; animation: spin 15s linear infinite; }
+        .s-num { font-family: var(--f-head); font-size: 3rem; color: var(--gold); line-height: 1; }
+        .s-txt { font-size: 0.9rem; color: var(--gray); margin-top: 5px; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .a-txt h2 { font-family: var(--f-head); font-size: 2.8rem; color: var(--gold); margin-bottom: 25px; line-height: 1.3; }
+        .a-txt p { font-size: 1.1rem; color: var(--gray); margin-bottom: 20px; line-height: 1.9; text-align: justify; }
+
+        /* =========================================
+           الفاصل السينمائي المذهل (Cinematic Quote)
+           ========================================= */
+        .cinematic-quote { position: relative; padding: 150px 5%; background: url('https://images.unsplash.com/photo-1578474846511-04ba529f0b88?q=80&w=1920&auto=format&fit=crop') center/cover fixed; display: flex; align-items: center; justify-content: center; text-align: center; border-top: 1px solid rgba(212,175,55,0.1); border-bottom: 1px solid rgba(212,175,55,0.1); }
+        .cinematic-quote::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, var(--bg), rgba(5,5,5,0.5), var(--bg)); }
+        .quote-box { position: relative; z-index: 2; max-width: 800px; background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(212, 175, 55, 0.3); padding: 60px 40px; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .quote-icon { font-family: var(--f-head); font-size: 5rem; color: var(--gold); line-height: 0; display: block; margin-bottom: 20px; opacity: 0.5; }
+        .quote-text { font-family: var(--f-head); font-size: clamp(1.6rem, 4vw, 2.2rem); color: #fff; line-height: 1.6; margin-bottom: 30px; }
+        .quote-author { color: var(--gold); font-size: 1.1rem; letter-spacing: 2px; }
+
+        /* Menu */
+        .menu-bg { background: var(--panel); }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 80px; max-width: 1200px; margin: 0 auto; }
+        .m-item { border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; transition: 0.4s; }
+        .m-item:hover { border-bottom-color: var(--gold); }
+        .m-head { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
+        .m-name { font-family: var(--f-head); font-size: 1.6rem; transition: 0.3s; }
+        .m-item:hover .m-name { color: var(--gold); }
+        .m-price { color: var(--gold); font-size: 1.3rem; font-weight: 700; }
+        .m-desc { color: var(--gray); font-size: 1rem; }
+
+        /* Gallery */
+        .gal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; max-width: 1200px; margin: 0 auto; }
+        .g-item { height: 300px; overflow: hidden; border-radius: 4px; }
+        .g-item img { transition: 0.8s; filter: brightness(0.7); height: 100%; }
+        .g-item:hover img { transform: scale(1.1); filter: brightness(1.1); }
+        .g-large { grid-column: span 2; grid-row: span 2; height: 615px; }
+
+        /* VIP Club */
+        .vip-sec { background: linear-gradient(135deg, #050505, #15120a); border-top: 1px solid rgba(212,175,55,0.2); border-bottom: 1px solid rgba(212,175,55,0.2); text-align: center; padding: 80px 5%;}
+        .vip-box { max-width: 700px; margin: 0 auto; }
+        .vip-box h2 { font-family: var(--f-head); font-size: 2.8rem; color: var(--gold); margin-bottom: 15px; }
+        .vip-box p { color: var(--gray); font-size: 1.1rem; margin-bottom: 30px; }
+        .vip-form { display: flex; gap: 10px; justify-content: center; }
+        .vip-form input { flex: 1; padding: 15px 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.3); color: #fff; font-family: var(--f-body); font-size: 1rem; outline: none; transition: 0.3s; }
+        .vip-form input:focus { border-color: var(--gold); background: rgba(0,0,0,0.8); }
+        .vip-form button { padding: 15px 40px; background: var(--gold); border: none; font-weight: 700; font-family: var(--f-body); font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+        .vip-form button:hover { background: #fff; color: #000; }
+
+        /* Reservation */
+        .res-sec { background: url('https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=1920&auto=format&fit=crop') center/cover fixed; }
+        .res-sec::before { content: ''; position: absolute; inset: 0; background: rgba(5,5,5,0.9); }
+        .res-box { position: relative; z-index: 2; background: rgba(10,10,10,0.8); backdrop-filter: blur(15px); max-width: 700px; margin: 0 auto; padding: 50px; border: 1px solid rgba(212,175,55,0.3); border-radius: 4px; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; color: var(--gold); margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding: 10px 0; color: #fff; font-family: var(--f-body); font-size: 1.1rem; outline: none; transition: 0.3s; }
+        .form-group input:focus, .form-group select:focus { border-bottom-color: var(--gold); }
+        .form-group select option { background: var(--panel); color: #fff; }
+        .btn-sub { width: 100%; padding: 15px; background: var(--gold); border: none; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-sub:hover { background: #fff; color: #000; letter-spacing: 2px; }
+
+        /* Footer */
+        footer { padding: 60px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        .f-brand { font-family: var(--f-head); font-size: 2.5rem; color: var(--gold); margin-bottom: 20px; }
+        .f-txt { color: var(--gray); margin-bottom: 20px; line-height: 2; }
+
+        /* Floating WhatsApp */
+        .wa-float { position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px; background: #25D366; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(37,211,102,0.4); z-index: 9999; transition: 0.3s; animation: pulseWa 2s infinite; }
+        .wa-float:hover { transform: scale(1.1); background: #1ebe5d; }
+        .wa-float svg { width: 35px; height: 35px; fill: currentColor; }
+        @keyframes pulseWa { 0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.5); } 70% { box-shadow: 0 0 0 15px rgba(37,211,102,0); } 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); } }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .links, .btn-res { display: none; }
+            .menu-btn { display: flex; }
+            .h-title { font-size: 3.5rem; }
+            .about, .menu-grid { grid-template-columns: 1fr; gap: 50px; }
+            .seal { right: 10px; bottom: -20px; width: 120px; height: 120px; }
+            .s-num { font-size: 2.2rem; }
+            .cinematic-quote { padding: 100px 5%; }
+            .quote-box { padding: 40px 20px; }
+            .gal-grid { grid-template-columns: 1fr; }
+            .g-large { grid-column: auto; grid-row: auto; height: 300px; }
+            .vip-form { flex-direction: column; }
+            section { padding: 80px 5%; }
+            .res-box { padding: 30px 20px; }
+            .m-track span { font-size: 1.2rem; margin: 0 20px; }
+            .marquee-mask { -webkit-mask-image: linear-gradient(to right, transparent, black 25%, black 75%, transparent); mask-image: linear-gradient(to right, transparent, black 25%, black 75%, transparent); }
+            /* تصغير أيقونة الواتساب في الموبايل */
+            .wa-float { width: 50px; height: 50px; bottom: 20px; left: 20px; }
+            .wa-float svg { width: 28px; height: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="logo">أُوركيد</div>
+        <ul class="links">
+            <li><a href="#about">القصة</a></li>
+            <li><a href="#menu">القائمة</a></li>
+            <li><a href="#gallery">المعرض</a></li>
+        </ul>
+        <a href="#reservation" class="btn-res">احجز طاولة</a>
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <div class="mob-menu" id="mobMenu">
+        <a href="#about" onclick="toggleMenu()">القصة</a>
+        <a href="#menu" onclick="toggleMenu()">القائمة</a>
+        <a href="#reservation" onclick="toggleMenu()">الحجز</a>
+        <a href="#" onclick="toggleMenu()" style="font-size: 1.2rem; color: var(--gold); margin-top: 30px;">إغلاق X</a>
+    </div>
+
+    <header class="hero">
+        <div class="h-content gs-rev">
+            <span class="h-sub">تجربة لا تُنسى</span>
+            <h1 class="h-title">فخامة المذاق<br>في أبهى صورها</h1>
+            <p style="color: #ccc; margin-bottom: 40px; font-size: 1.1rem;">حيث تلتقي المكونات النادرة مع براعة الطهي في أجواء من الخصوصية المطلقة.</p>
+            <a href="#menu" class="h-btn">استكشف القائمة</a>
+        </div>
+    </header>
+
+    <div class="marquee-sec">
+        <div class="marquee-mask">
+            <div class="m-track">
+                <span>• تجربة استثنائية • خدمة مخملية • طهاة عالميين • مكونات نادرة • تجربة استثنائية • خدمة مخملية • طهاة عالميين • مكونات نادرة</span>
+            </div>
+        </div>
+    </div>
+
+    <section id="about">
+        <div class="about">
+            <div class="a-img-box gs-rev">
+                <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1000&auto=format&fit=crop" alt="أجواء" class="a-img">
+                <div class="seal">
+                    <span class="s-num">٢٥</span>
+                    <span class="s-txt">عاماً من التميز</span>
+                </div>
+            </div>
+            <div class="a-txt gs-rev">
+                <span class="s-sub" style="margin-bottom: 5px;">إرث المذاق</span>
+                <h2>فن الضيافة المخملية<br>وإعادة ابتكار الكلاسيكية.</h2>
+                <p>تصميمنا الداخلي ليس مجرد ديكور، بل مسرح هادئ صُمم خصيصاً ليعزل ضيوفنا عن صخب العالم الخارجي. نحن نؤمن أن الوجبة الاستثنائية تتطلب أجواءً تليق بها.</p>
+                <p>من الإضاءة الخافتة المدروسة بعناية، إلى المقاعد الوثيرة، وصولاً إلى الخدمة التي تتوقع احتياجاتك قبل أن تطلبها. كل زاوية في "أوركيد" تروي قصة شغف لا ينتهي.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cinematic-quote">
+        <div class="quote-box gs-rev">
+            <span class="quote-icon">❝</span>
+            <p class="quote-text">لا نطبخ الطعام لنشبع الجوع، بل نبتكر لوحات فنية لتشبع الروح. هنا، كل طبق هو قصة تُروى، وكل لقمة هي ذكرى تُحفر.</p>
+            <span class="quote-author">— الشيف التنفيذي</span>
+        </div>
+    </section>
+
+    <section id="menu" class="menu-bg">
+        <div class="sec-head gs-rev">
+            <span class="s-sub">إبداعات الشيف</span>
+            <h2 class="s-title">القائمة المختارة</h2>
+        </div>
+        <div class="menu-grid gs-rev">
+            <div class="m-item">
+                <div class="m-head"><span class="m-name">واغيو ستيك A5</span><span class="m-price">٨٥٠,٠٠٠ ل.س</span></div>
+                <p class="m-desc">لحم ياباني فاخر مطهو ببطء، يقدم مع صلصة الترفل الأسود.</p>
+            </div>
+            <div class="m-item">
+                <div class="m-head"><span class="m-name">لوبستر مشوي</span><span class="m-price">٦٢٠,٠٠٠ ل.س</span></div>
+                <p class="m-desc">كركند طازج مع زبدة الأعشاب والليمون الكلاسيكية.</p>
+            </div>
+            <div class="m-item">
+                <div class="m-head"><span class="m-name">ريزوتو الكافيار والذهب</span><span class="m-price">١,١٠٠,٠٠٠ ل.س</span></div>
+                <p class="m-desc">أرز إيطالي مع قطع الذهب الصالح للأكل وكافيار بيلوغا النادر.</p>
+            </div>
+            <div class="m-item">
+                <div class="m-head"><span class="m-name">تارت الشوكولاتة</span><span class="m-price">١٨٠,٠٠٠ ل.س</span></div>
+                <p class="m-desc">شوكولاتة بلجيكية داكنة مع توت بري ولمسة من الكراميل المملح.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <div class="sec-head gs-rev">
+            <span class="s-sub">الأجواء</span>
+            <h2 class="s-title">معرض الصور</h2>
+        </div>
+        <div class="gal-grid gs-rev">
+            <div class="g-item g-large"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop" alt="أجواء"></div>
+            <div class="g-item"><img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1000&auto=format&fit=crop" alt="أطباق"></div>
+            <div class="g-item"><img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1000&auto=format&fit=crop" alt="طاولة"></div>
+            <div class="g-item"><img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=1000&auto=format&fit=crop" alt="تقديم"></div>
+            <div class="g-item"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1000&auto=format&fit=crop" alt="المطعم"></div>
+        </div>
+    </section>
+
+    <section class="vip-sec">
+        <div class="vip-box gs-rev">
+            <h2>انضم لنادي النخبة</h2>
+            <p>سجل معنا لتكون أول من تصله دعواتنا الخاصة، قوائم التذوق السرية، وحجوزات الأولوية.</p>
+            <form class="vip-form" onsubmit="event.preventDefault();">
+                <input type="text" placeholder="الاسم الكريم" required>
+                <input type="tel" placeholder="رقم الهاتف (واتساب)" required>
+                <button type="submit">طلب انضمام</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="reservation" class="res-sec">
+        <div class="res-box gs-rev">
+            <div class="sec-head" style="margin-bottom: 40px;">
+                <h2 class="s-title" style="font-size: 2.8rem;">تأمين طاولتك</h2>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" placeholder="الاسم الكريم...">
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف</label>
+                    <input type="tel" placeholder="+963...">
+                </div>
+                <div class="form-group">
+                    <label>تاريخ الحجز</label>
+                    <input type="date">
+                </div>
+                <div class="form-group">
+                    <label>عدد الأشخاص</label>
+                    <select>
+                        <option>شخصين</option>
+                        <option>٤ أشخاص</option>
+                        <option>قاعة VIP</option>
+                    </select>
+                </div>
+                <button type="button" class="btn-sub">تأكيد الحجز</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="f-brand">أُوركيد</div>
+        <div class="f-txt">
+            سوريا، دمشق - حي المالكي الراقي<br>
+            +963 11 000 0000 | vip@orchid-dining.com<br>
+            <span style="color: var(--gold); display: block; margin-top: 10px;">يومياً: ٧ مساءً - ٢ صباحاً</span>
+        </div>
+        <p style="color: #444; font-size: 0.9rem;">&copy; 2026 جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <a href="https://wa.me/963983688594" class="wa-float" target="_blank" title="تواصل عبر واتساب">
+        <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.711.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 3.825.001 6.938 3.113 6.938 6.938-.001 3.825-3.113 6.938-6.938 6.938z"/></svg>
+    </a>
+
+    <script>
+        function toggleMenu() { document.getElementById('mobMenu').classList.toggle('active'); }
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.gs-rev').forEach(elem => {
+            gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 85%" }, y: 50, opacity: 0, duration: 1.2, ease: "power3.out" });
+        });
+    </script>
+</body>
+</html>
